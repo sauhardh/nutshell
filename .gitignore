@@ -1,0 +1,11 @@
+**/node_modules/
+**/build/
+
+# typescript build's out directory
+**/dist/
+
+# cloned repos stays here.
+**/repos/
+
+# environment variables
+**/.env

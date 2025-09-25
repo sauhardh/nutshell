@@ -3,9 +3,9 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config"
-import { createClient } from "redis";
 
 import { router } from "./router/route";
+import { redisClient } from "./redis";
 
 const app = express();
 app.use(express.json());
@@ -13,19 +13,26 @@ app.use(cors());
 
 app.use("/api/v1", router);
 
-
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const start = async () => {
     try {
+        await redisClient.connect();
         app.listen(PORT, async () => {
             console.log(`Upload Server Listening on port: ${PORT}`);
         });
 
-        // const client = await createClient().on("error", err => console.error("Redis client Error", err)).connect();
     } catch (error) {
         console.error(`Error occured: ${error}`);
     }
 }
-
 start();
+
+const shutdown = async (signal: string) => {
+    console.log(`SHUTTING DOWN GRACEFULLY...(${signal})`);
+    redisClient.disconnect();
+    process.exit(0);
+};
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+
 

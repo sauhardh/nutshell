@@ -1,4 +1,11 @@
-import { S3Client, PutObjectCommand, DeleteBucketCommand, ListObjectsCommand, DeleteObjectsCommand, ListObjectsCommandOutput, DeleteObjectsCommandOutput, DeleteBucketCommandOutput } from "@aws-sdk/client-s3";
+import {
+    S3Client, PutObjectCommand, DeleteBucketCommand,
+    DeleteObjectsCommand, ListObjectsCommandOutput, DeleteObjectsCommandOutput, DeleteBucketCommandOutput,
+    HeadBucketCommand,
+    CreateBucketCommand,
+    ListObjectsV2Command,
+    ListObjectsV2CommandOutput,
+} from "@aws-sdk/client-s3";
 import { BUCKET_NAME } from "../constansts";
 
 import fs from "fs";
@@ -26,7 +33,7 @@ export function generateRandom(): string {
         .toString("base64")
         .replace(/[^a-zA-Z0-9]/g, "")
         .substring(0, length);
-}
+};
 
 /**
  * lists all the files (recursively) from the given absolute path. 
@@ -46,8 +53,7 @@ export function listAllFilesFromPath(absPath: string = path.join(__dirname, "rep
     });
 
     return dirs;
-}
-
+};
 
 /**
  * Uploads every single file to the `s3` bucket on the cloud.
@@ -65,20 +71,21 @@ export async function _uploadObject(absfilePath: string): Promise<void> {
     });
 
     await s3.send(command);
-}
+};
 
 /**
  * List all objects from bucket
  * @param bucketName - Name of the bucket
- * @returns type `ListObjectCommandOutput`
+ * @returns type `ListObjectV2CommandOutput`
  */
-export async function _listAllObjects(bucketName: string): Promise<ListObjectsCommandOutput> {
-    const command = new ListObjectsCommand({
-        Bucket: bucketName
+export async function _listObjects(bucketName: string, prefix?: string): Promise<ListObjectsV2CommandOutput> {
+    const command = new ListObjectsV2Command({
+        Bucket: bucketName,
+        ...(prefix && { Prefix: prefix })
     });
 
     return await s3.send(command);
-}
+};
 
 /**
  * List all objects from bucket
@@ -101,7 +108,7 @@ export async function _deleteObjects(bucketName: string, listOfObjects: ListObje
     };
     const command = new DeleteObjectsCommand(input);
     return await s3.send(command);
-}
+};
 
 /**
  * Delete Objects from bucket.
@@ -113,4 +120,39 @@ export async function _deleteBucket(bucketName: string): Promise<DeleteBucketCom
     });
 
     return await s3.send(command);
-}
+};
+
+/**
+ * Checks if bucket exist
+ * @param bucketName - Name of the bucket
+ */
+export async function _bucketExists(bucketName: string = BUCKET_NAME): Promise<boolean> {
+    try {
+        const command = new HeadBucketCommand({ Bucket: bucketName });
+        await s3.send(command);
+        return true;
+    } catch (error: any) {
+        console.log("Error occured while checking if bucket exist.", error);
+        if (error?.$metadata?.httpStatusCode === 404) {
+            return false;
+        }
+        throw error;
+    }
+};
+
+/**
+ * Creates a bucket
+ * @param bucketName - Name of the bucket
+ */
+export async function _createBucket(bucketName: string = BUCKET_NAME): Promise<boolean> {
+    const input = { Bucket: bucketName };
+
+    try {
+        const command = new CreateBucketCommand(input);
+        await s3.send(command);
+        return true;
+    } catch (error) {
+        console.warn("Error occured while creating bucket. Bucket Name:", bucketName, error);
+        return false;
+    }
+};
