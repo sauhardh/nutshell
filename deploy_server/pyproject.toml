@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "deploy-server"
+version = "0.1.0"
+description = "Deployment server to faciliate a nutshell application"
+authors = ["sauhardh <sauhardhakafle12@gmail.com>"]
+readme = "README.md"
+packages = [
+    {include = "core"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.1.2"
+redis = "^6.4.0"
+boto3 = "^1.40.40"
+python-dotenv = "^1.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

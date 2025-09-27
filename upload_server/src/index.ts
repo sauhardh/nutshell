@@ -1,11 +1,13 @@
 "use strict"
 
-import express from "express";
 import cors from "cors";
-import "dotenv/config"
+import { configDotenv } from "dotenv";
+import express from "express";
 
 import { router } from "./router/route";
 import { redisClient } from "./redis";
+
+configDotenv({ path: "../.env" });
 
 const app = express();
 app.use(express.json());

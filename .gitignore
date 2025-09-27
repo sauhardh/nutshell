@@ -9,3 +9,9 @@
 
 # environment variables
 **/.env
+
+# virtual environment
+.venv
+
+# python pycache
+**/__pycache__/

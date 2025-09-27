@@ -3,7 +3,7 @@ const router = express.Router();
 
 import { downloadAndUploadRepo, deleteBucket, JobStatus, deleteObjects } from "../controller";
 
-// User will send the repo url as input.
+// User will send the repo's url as input.
 // And this function will download the repo, and upload it the s3 cloud
 router.post("/deploy", downloadAndUploadRepo)
 
