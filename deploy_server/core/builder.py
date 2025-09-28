@@ -11,7 +11,9 @@ class Build:
             app_path = Path(app_path)
             build_path = app_path / "build"
 
-        if Path.exists(app_path):
+        print("app_path", app_path, "build_path", build_path)
+
+        if not Path.exists(app_path):
             # TODO: log: path does not exist
             raise FileNotFoundError(f"{app_path} does not exist")
 

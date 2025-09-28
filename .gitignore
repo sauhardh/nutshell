@@ -15,3 +15,7 @@
 
 # python pycache
 **/__pycache__/
+
+# python downlaods
+**/downloads
+
