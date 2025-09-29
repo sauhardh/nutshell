@@ -12,6 +12,9 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 
+import { configDotenv } from "dotenv";
+configDotenv({ path: path.resolve(__dirname, "../../../.env") });
+
 // INITIALIZATION OF S3 CLIENT.
 export const s3 = new S3Client({
     region: "auto",
@@ -132,7 +135,7 @@ export async function _bucketExists(bucketName: string = BUCKET_NAME): Promise<b
         await s3.send(command);
         return true;
     } catch (error: any) {
-        console.log("Error occured while checking if bucket exist.", error);
+        console.warn("Error occured while checking if bucket exist.", error);
         if (error?.$metadata?.httpStatusCode === 404) {
             return false;
         }

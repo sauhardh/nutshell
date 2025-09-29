@@ -3,15 +3,15 @@ from pathlib import Path
 
 
 class Build:
+    _build_path: str | Path | None = None
+
     def __init__(self):
         self.client = docker.from_env()
 
     def build(self, app_path: Path | str):
         if isinstance(app_path, str):
             app_path = Path(app_path)
-            build_path = app_path / "build"
-
-        print("app_path", app_path, "build_path", build_path)
+            self._build_path = app_path / "build"
 
         if not Path.exists(app_path):
             # TODO: log: path does not exist
@@ -26,9 +26,15 @@ class Build:
             tty=True,
         )
 
-        # logs
-        for line in container.logs(stream=True):
-            print(line.decode("utf-8").strip())
+        # logging
+        buffer = ""
+        for chunk in container.logs(stream=True):
+            text = chunk.decode("utf-8")
+            if "\n" in text:
+                print(buffer)
+                buffer = ""
+                continue
+            buffer += text
 
         exit_code = container.wait()["StatusCode"]
         container.remove()
@@ -37,5 +43,10 @@ class Build:
             raise RuntimeError(
                 f"React build faile inside container. Exit code: {exit_code}"
             )
+
+        return self
+
+    def get_build_path(self) -> str | Path | None:
+        return self._build_path
 
         # upload build path

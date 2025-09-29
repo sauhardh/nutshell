@@ -11,13 +11,16 @@ import { redisClient } from "../redis";
  * To download Github repo and upload it to `cloudflare` 
  * 
  * Note: Pass Github repo url on *request body* as `repoUrl`
+ * Note: Pass Bucket Name on *request body* as `bucketName`
  */
 export async function downloadAndUploadRepo(req: Request, res: Response): Promise<void> {
     const _id: string = generateRandom();
     const localRepoPath: string = path.join(__dirname, `repos/${_id}`);
 
     try {
-        const repoUrl: string = req.body.repoUrl;
+        const repoUrl: string = req.body?.repoUrl;
+        const bucketName: string = req.body?.bucketName;
+
         /// UPDATE LOGGING
         await redisClient.lPush("jobQueue", _id);
         await redisClient.hSet("status", _id, "uploading");
@@ -26,19 +29,19 @@ export async function downloadAndUploadRepo(req: Request, res: Response): Promis
         let allFiles: string[] = listAllFilesFromPath(localRepoPath);
 
         /// IF BUCKET DOES NOT EXIST, IT CREATES A NEW ONE. BUCKET NAME IS DEFAULT HERE i.e. nutshell
-        if (!await _bucketExists()) await _createBucket();
+        if (!await _bucketExists(bucketName)) await _createBucket(bucketName);
 
         for (let file of allFiles) {
             await _uploadObject(file);
         }
         /// UPDATE LOGGING
         await redisClient.hSet("status", _id, "download completed");
-        res.status(200).json({ type: "success", message: "url received." });
+        res.status(200).json({ type: "success", message: _id });
     } catch (error) {
         console.warn("Failed while downloading repo -> finding local path to download repo -> uploading files to the s3 cloud\n\n", error);
         /// UPDATE LOGGING
         await redisClient.hSet("status", _id, "Failed to download");
-        res.status(404).json({ type: "failed", message: "Could not clone the github url link." });
+        res.status(404).json({ type: "failed", message: "Failed to download and Upload Repo" });
     }
 }
 
@@ -122,6 +125,6 @@ export async function JobStatus(req: Request, res: Response) {
         res.status(200).json({ type: "success", message: status });
     } catch (error) {
         console.warn("Could not get status info from redis", error);
-        res.status(400).json({ type: "Failed", message: "Could not get status info from redis" });
+        res.status(400).json({ type: "failed", message: "Could not get status info from redis" });
     }
 }
