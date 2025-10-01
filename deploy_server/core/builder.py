@@ -1,5 +1,8 @@
 import docker
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Build:
@@ -25,13 +28,12 @@ class Build:
             detach=True,
             tty=True,
         )
-
         # logging
         buffer = ""
         for chunk in container.logs(stream=True):
             text = chunk.decode("utf-8")
             if "\n" in text:
-                print(buffer)
+                logger.info(buffer)
                 buffer = ""
                 continue
             buffer += text
@@ -43,10 +45,7 @@ class Build:
             raise RuntimeError(
                 f"React build faile inside container. Exit code: {exit_code}"
             )
-
         return self
 
     def get_build_path(self) -> str | Path | None:
         return self._build_path
-
-        # upload build path
