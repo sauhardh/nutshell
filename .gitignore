@@ -16,6 +16,8 @@
 # python pycache
 **/__pycache__/
 
-# python downlaods
+# python downloads
 **/downloads
 
+# rust target
+**/target
