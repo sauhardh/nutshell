@@ -32,7 +32,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .wrap(middleware::NormalizePath::trim())
             .wrap(middleware::Logger::default())
     })
-    .workers(1)
+    .workers(2)
     .bind(("127.0.0.1", 7878))?
     .run()
     .await

@@ -1,6 +1,8 @@
 use aws_config::Region;
 use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_s3::{self as s3, Client};
+
+use aws_sdk_s3 as s3;
+use s3::Client;
 use s3::config::Builder;
 use s3::config::Credentials;
 

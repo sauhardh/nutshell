@@ -23,6 +23,7 @@ def main(
     next_repo = redis_client.get_current_job("jobQueue")
     redis_client.put_status("status", key=next_repo, value="downloading...")
 
+    logger.info("next_repo %s", next_repo)
     if not next_repo:
         logger.info("No new jobs. Did not get any another job to continue.")
         return False

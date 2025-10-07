@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 class Build:
-    _build_path: str | Path | None = None
+    _build_path: Path | None = None
 
     def __init__(self):
         self.client = docker.from_env()
@@ -14,10 +14,11 @@ class Build:
     def build(self, app_path: Path | str):
         if isinstance(app_path, str):
             app_path = Path(app_path)
-            self._build_path = app_path / "build"
 
-        if not Path.exists(app_path):
-            # TODO: log: path does not exist
+        self._build_path = app_path / "build"
+
+        if not app_path.exists():
+            logger.info(f"Provided Path {app_path} does not exist")
             raise FileNotFoundError(f"{app_path} does not exist")
 
         container = self.client.containers.run(
@@ -37,6 +38,9 @@ class Build:
                 buffer = ""
                 continue
             buffer += text
+        if buffer:
+            logger.info(buffer.strip())
+            buffer = ""
 
         exit_code = container.wait()["StatusCode"]
         container.remove()
@@ -47,5 +51,5 @@ class Build:
             )
         return self
 
-    def get_build_path(self) -> str | Path | None:
+    def get_build_path(self) -> Path | None:
         return self._build_path

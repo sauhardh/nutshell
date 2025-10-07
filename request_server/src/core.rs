@@ -1,8 +1,15 @@
-use actix_web::{HttpRequest, HttpResponse, Responder, get, web};
+use actix_web::HttpRequest;
+use actix_web::HttpResponse;
+use actix_web::Responder;
+use actix_web::get;
+use actix_web::web;
+
 use aws_sdk_s3::Client;
 use log::{info, warn};
 use serde_json::json;
-use std::{env, path::Path};
+
+use std::env;
+use std::path::Path;
 
 #[get("/{tail:.*}")]
 pub async fn load_webpage(
@@ -21,9 +28,6 @@ pub async fn load_webpage(
         file = "index.html".to_string();
     }
 
-    info!("id {id}, bucket_name {bucket_name}, file: {file}");
-
-    let id = "jaDlMY";
     match client
         .get_object()
         .bucket(bucket_name)
@@ -40,19 +44,6 @@ pub async fn load_webpage(
         }
 
         Ok(obj) => {
-            // let content_type = {
-            // let fallback = obj.content_type().map(|s| s.to_string());
-            // match Path::new(&file).extension().and_then(|e| e.to_str()) {
-            //     Some("html") => "text/html",
-            //     Some("css") => "text/css",
-            //     Some("js") => "application/javascript",
-            //     Some("ico") => "image/x-icon",
-            //     Some("png") => "image/png",
-            //     Some("svg") => "image/svg+xml",
-            //     _ => &fallback.unwrap_or("application/octet-stream".to_string()),
-            // }
-            // };
-
             let content_type = mime_guess::from_path(Path::new(&file)).first_or_octet_stream();
 
             if let Ok(body) = obj.body.collect().await {
