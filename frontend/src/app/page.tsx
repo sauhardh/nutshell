@@ -3,15 +3,16 @@ import Image from "next/image";
 import Hero from "@/components/Hero";
 import Cards from "@/components/Cards";
 import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
     <div className="font-roboto w-full">
-      <div className="z-100">
+      <header className="z-100">
         <Navbar />
-      </div>
+      </header>
 
-      <div className="w-full mt-20">
+      <main className="w-full mt-20">
         <div className="p-10">
           <Hero />
         </div>
@@ -21,7 +22,11 @@ export default function Home() {
         <div className="mt-20 p-10">
           <Contact />
         </div>
-      </div>
+      </main >
+
+      <footer className="mt-15 mb-5">
+        <Footer />
+      </footer>
     </div >
   );
 }
