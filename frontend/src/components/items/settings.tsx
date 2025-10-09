@@ -30,9 +30,8 @@ export default function Settings() {
                 align="end"
                 sideOffset={8}
                 className="w-full font-roboto  rounded-xl shadow-lg p-3 flex flex-col gap-2
-                   border border-border
-                    bg-popover text-less-primary"
-
+                border border-border
+                bg-popover text-less-primary"
             >
                 <DropdownMenuLabel className="text-sm font-medium text-muted-foreground">
                     <div className="flex-col">
@@ -40,7 +39,6 @@ export default function Settings() {
                         <p className="font-extralight">sauhardhakafle@gmail.com</p>
                     </div>
                 </DropdownMenuLabel>
-
                 <DropdownMenuSeparator className="border-border border-1 my-2" />
 
                 <DropdownMenuItem className="flex items-center gap-2 px-3 mx-0 py-2 rounded-lg cursor-pointer focus:outline-none"
@@ -66,8 +64,7 @@ export default function Settings() {
                     </div>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer 
-                                    hover:bg-border hover:text-popover-foreground focus:outline-none"
+                <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-border hover:text-popover-foreground focus:outline-none"
                     onClick={() => router.push("/")}
                     onSelect={(event) => event.preventDefault()}
                 >
@@ -78,7 +75,6 @@ export default function Settings() {
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator className="border-border border-1 py-0" />
-
                 <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 pt-1 rounded-lg cursor-pointer 
                                     hover:bg-border hover:text-popover-foreground focus:outline-none"
                     onSelect={(event) => event.preventDefault()}>
