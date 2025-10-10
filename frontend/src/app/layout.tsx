@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Geist_Mono, Roboto } from "next/font/google";
 import ThemeProvider from "@/components/theme-provider";
+import SessionWrapper from "@/components/SessionWrapper";
+import Navbar from "@/components/Navbar";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -26,19 +28,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistMono.variable} ${roboto.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
+    <SessionWrapper>
+      <html lang="en" suppressHydrationWarning={true}>
+        <body
+          className={`${geistMono.variable} ${roboto.variable} antialiased`}
         >
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <header className="z-100">
+              <Navbar />
+            </header>
+
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </SessionWrapper>
   );
 }

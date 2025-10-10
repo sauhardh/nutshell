@@ -34,7 +34,7 @@ export default function Contact() {
         }, 3000);
     }
     return (
-        <div className='flex gap-4 justify-around items-start'>
+        <div className='flex gap-4 justify-around items-start' id="contact">
             <div className='flex-col flex justify-center items-center gap-12'>
                 <h1 className='text-primary font-bold text-3xl'>Talk to our team.</h1>
                 <div className='flex-col flex gap-4 items-center text-muted-foreground px-45'>

@@ -3,8 +3,13 @@ import StartButton from './items/start-btn'
 import { Spotlight } from './ui/spotlight'
 import { ShootingStars } from './ui/shooting-stars'
 import { StarsBackground } from './ui/stars-background'
+import { getServerSession } from 'next-auth'
+import Link from 'next/link'
+import { parseUsername } from '@/lib/parseUsername'
 
-export default function Hero() {
+export default async function Hero() {
+    const session = await getServerSession();
+
     return (
         <div className='flex-col'>
             {/* Decoration */}
@@ -21,7 +26,10 @@ export default function Hero() {
                 <p className='text-muted-foreground'>
                     Nutshell provides the developer tools and cloud infrastructure to build, scale, and secure a faster, more personalized web.
                 </p>
-                <StartButton />
+
+                <Link href={session?.user?.name ? `/${parseUsername(session?.user?.name)}` : "/login"}>
+                    <StartButton />
+                </Link>
             </div>
         </div>
     )
