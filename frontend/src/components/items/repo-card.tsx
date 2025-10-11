@@ -1,19 +1,21 @@
 import { RepoType } from '@/app/new/page'
 import { Lock } from 'lucide-react'
 import React from 'react'
-import { Button } from '../ui/button'
+import ImportBtn from './buttons/import-btn'
 
 export default function RepoCard({
-    repo,
+    repoName,
     pub,
     date,
-    url
+    repoLink,
+    teamSlug,
+    branch
 }: RepoType) {
     return (
         <div className='flex items-center justify-between px-4 py-2.5 text-sm'>
             <div className='flex gap-1 items-center'>
                 <p className='flex font-medium'>
-                    {repo}&nbsp;
+                    {repoName}&nbsp;
                     <span className='flex items-center gap-1 text-muted-foreground'>
                         {
                             pub ? "" : <Lock className='w-3 h-3' />
@@ -26,9 +28,7 @@ export default function RepoCard({
                 </div>
             </div>
 
-            <Button size={"sm"}>
-                Import
-            </Button>
+            <ImportBtn projectName={repoName} link={repoLink} teamSlug={teamSlug} branch={branch} />
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { LoaderPinwheel } from 'lucide-react'
-import LoginButton from '@/components/items/login-btn'
+import LoginButton from '@/components/items/buttons/login-btn'
 
 export default function Login() {
     return (

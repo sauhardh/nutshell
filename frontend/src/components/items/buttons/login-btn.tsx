@@ -1,8 +1,9 @@
 "use client"
 import React from 'react'
-import { Button } from '../ui/button'
+import { Button } from '../../ui/button'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { GithubLogo } from './logos';
+// import { GithubLogo } from './logos';
+import { GithubLogo } from '../logos'
 import { BadgeCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { parseUsername } from '@/lib/parseUsername';

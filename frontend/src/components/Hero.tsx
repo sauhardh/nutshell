@@ -1,5 +1,5 @@
 import React from 'react'
-import StartButton from './items/start-btn'
+import StartButton from './items/buttons/start-btn'
 import { Spotlight } from './ui/spotlight'
 import { ShootingStars } from './ui/shooting-stars'
 import { StarsBackground } from './ui/stars-background'

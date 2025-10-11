@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from '../ui/button'
+import { Button } from '../../ui/button'
 import { LoaderPinwheel } from 'lucide-react'
 
 export default function StartButton() {

@@ -1,4 +1,4 @@
-import AddNewBtn from '@/components/items/username-addnew-btn';
+import AddNewBtn from '@/components/items/buttons/addnew-btn';
 import ProjectCard, { ProjectCardType } from '@/components/items/project-card';
 import SearchBar from '@/components/items/search-bar';
 import { authOptions } from '@/lib/authOptions';
