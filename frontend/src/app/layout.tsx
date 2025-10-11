@@ -31,6 +31,7 @@ export default function RootLayout({
     <SessionWrapper>
       <html lang="en" suppressHydrationWarning={true}>
         <body
+          suppressHydrationWarning
           className={`${geistMono.variable} ${roboto.variable} antialiased`}
         >
           <ThemeProvider

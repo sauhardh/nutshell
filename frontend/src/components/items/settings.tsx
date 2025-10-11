@@ -45,8 +45,8 @@ export default function Settings() {
             >
                 <DropdownMenuLabel className="text-sm font-medium text-muted-foreground">
                     <div className="flex-col">
-                        <p className="font-medium">{session?.user?.name || "user"}</p>
-                        <p className="font-extralight">{session?.user?.email || "...@gmail.com"}</p>
+                        <p className="font-medium">{session?.user?.name || "username"}</p>
+                        <p className="font-extralight">{session?.user?.email || "###@gmail.com"}</p>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="border-border border-1 my-2" />

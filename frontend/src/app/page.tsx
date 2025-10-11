@@ -6,6 +6,7 @@ import HomeLayout from "@/components/HomeLayout";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+
   if (session && session.user?.name) {
     redirect(`/${parseUsername(session.user.name)}`)
   }

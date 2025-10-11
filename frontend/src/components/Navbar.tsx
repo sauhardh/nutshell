@@ -18,7 +18,6 @@ export default async function Navbar() {
         <div className='w-full flex justify-between p-3 px-4 '>
             <div>
                 <CompanyLogo className='font-black text-2xl font-roboto' />
-                {/*TODO users github */}
             </div>
 
             <div className='flex gap-4 items-center'>
