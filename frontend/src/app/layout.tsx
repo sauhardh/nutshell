@@ -43,7 +43,6 @@ export default function RootLayout({
             <header className="z-100">
               <Navbar />
             </header>
-
             {children}
           </ThemeProvider>
         </body>

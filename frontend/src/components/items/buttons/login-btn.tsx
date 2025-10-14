@@ -13,8 +13,8 @@ export default function LoginButton({ provider, text, iconClassName }: { provide
     const { data: session } = useSession();
     if (session) {
         if (session.user?.name) {
-            let username = parseUsername(session.user.name)
-            router.replace(`/${username}`);
+            let _name = parseUsername(session.user.name)
+            router.replace(`/${_name}`);
         } else {
             router.push("/")
         };

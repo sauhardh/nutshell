@@ -4,16 +4,14 @@ import Settings from './items/settings'
 import SignupButton from './items/buttons/signup-btn'
 import ContactButton from './items/buttons/contact-btn'
 import { Button } from './ui/button'
-import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/authOptions'
-
+import Link from 'next/link'
+import ContactVisibility from './items/contact-visibility'
 
 export default async function Navbar() {
     const session = await getServerSession(authOptions);
-    const navigateLogin = () => {
-        redirect("/login")
-    }
+
     return (
         <div className='w-full flex justify-between p-3 px-4 '>
             <div>
@@ -27,14 +25,17 @@ export default async function Navbar() {
                         :
                         <div className='flex gap-4'>
                             {/* LoginButton */}
-                            <Button
-                                className='px-5'
-                                onClick={navigateLogin}
-                            >
-                                Login
-                            </Button>
+                            <Link href={"/login"}>
+                                <Button
+                                    className='px-5'
+                                >
+                                    Login
+                                </Button>
+                            </Link>
                             <SignupButton />
-                            <ContactButton />
+                            <ContactVisibility>
+                                <ContactButton />
+                            </ContactVisibility>
                         </div>
                 }
             </div>

@@ -45,7 +45,7 @@ export default function Settings() {
             >
                 <DropdownMenuLabel className="text-sm font-medium text-muted-foreground">
                     <div className="flex-col">
-                        <p className="font-medium">{session?.user?.name || "username"}</p>
+                        <p className="font-medium">{session?.user?.username || "username"}</p>
                         <p className="font-extralight">{session?.user?.email || "###@gmail.com"}</p>
                     </div>
                 </DropdownMenuLabel>

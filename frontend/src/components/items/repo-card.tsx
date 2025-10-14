@@ -1,7 +1,15 @@
-import { RepoType } from '@/app/new/page'
 import { Lock } from 'lucide-react'
 import React from 'react'
 import ImportBtn from './buttons/import-btn'
+
+export type RepoType = {
+    repoName: string,
+    pub: boolean,
+    date: string,
+    repoLink: string,
+    teamSlug: string,
+    branch: string
+}
 
 export default function RepoCard({
     repoName,

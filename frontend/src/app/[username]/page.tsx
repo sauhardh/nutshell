@@ -18,11 +18,9 @@ export default async function Page(props: pageProps) {
     const session = await getServerSession(authOptions);
     if (!session) redirect("/login");
 
-
     const usernameFromSession = parseUsername(session.user?.name);
     console.log("username", username, 'usernamefromsession', usernameFromSession);
     if (username !== usernameFromSession) redirect("/home");
-
 
     const projects: ProjectCardType[] = [
         {

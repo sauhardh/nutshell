@@ -1,12 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
-import { LoaderPinwheel } from 'lucide-react'
 import LoginButton from '@/components/items/buttons/login-btn'
 
 export default function Login() {
     return (
         <main className='flex flex-col items-center justify-center'>
-            <LoaderPinwheel className='absolute left-5 top-5 animate-none hover:animate-spin' />
             <div className='flex flex-col mt-20 bg-border border shadow-2xl px-20 rounded-xl pt-20 pb-5 gap-10'>
                 <div className='flex flex-col items-center gap-10'>
                     <div className='flex items-center justify-center gap-2'>
