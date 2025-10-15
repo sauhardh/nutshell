@@ -21,7 +21,9 @@ export const authOptions: NextAuthOptions = {
         },
 
         async session({ session, token }) {
-            session.user.username = token.username;
+            // Safety: Considering Github OAuth, it "should" present username and sub.
+            session.user.username = token.username!;
+            session.user.id = token.sub!;
             return session;
         }
     }

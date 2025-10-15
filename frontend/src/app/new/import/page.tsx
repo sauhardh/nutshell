@@ -36,8 +36,15 @@ export default async function Page({ searchParams }: ImportPageProps) {
 
                 <div className='w-full'>
                     <p className='text-muted-foreground text-sm'>Root Directory</p>
-                    <div className='border border-border w-full rounded-sm p-2'>
+                    <div className='border border-border w-full rounded-sm p-2 text-sm text-muted-foreground'>
                         ./
+                    </div>
+                </div>
+
+                <div className='w-full'>
+                    <p className='text-muted-foreground text-sm'>Url</p>
+                    <div className='border border-border w-full rounded-sm p-2 text-muted-foreground text-sm'>
+                        {link}
                     </div>
                 </div>
 
@@ -51,9 +58,7 @@ export default async function Page({ searchParams }: ImportPageProps) {
                         <p>deploying...</p>
                     </div>
                 </div>
-
             </div>
-
         </div>
     )
 }

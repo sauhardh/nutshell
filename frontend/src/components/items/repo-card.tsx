@@ -4,20 +4,21 @@ import ImportBtn from './buttons/import-btn'
 
 export type RepoType = {
     repoName: string,
-    pub: boolean,
+    _private: boolean,
     date: string,
     repoLink: string,
-    teamSlug: string,
-    branch: string
+    teamSlug?: string,
+    branch: string,
+    username: string
 }
 
 export default function RepoCard({
     repoName,
-    pub,
+    _private,
     date,
     repoLink,
-    teamSlug,
-    branch
+    branch,
+    username
 }: RepoType) {
     return (
         <div className='flex items-center justify-between px-4 py-2.5 text-sm'>
@@ -26,7 +27,7 @@ export default function RepoCard({
                     {repoName}&nbsp;
                     <span className='flex items-center gap-1 text-muted-foreground'>
                         {
-                            pub ? "" : <Lock className='w-3 h-3' />
+                            _private ? <Lock className='w-3 h-3' /> : ""
                         }
                         &nbsp;.&nbsp;
                     </span>
@@ -36,7 +37,7 @@ export default function RepoCard({
                 </div>
             </div>
 
-            <ImportBtn projectName={repoName} link={repoLink} teamSlug={teamSlug} branch={branch} />
+            <ImportBtn projectName={repoName} link={repoLink} branch={branch} username={username} />
         </div>
     )
 }
