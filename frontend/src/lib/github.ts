@@ -34,6 +34,8 @@ export class GithubRepos {
         const response = await this._githubAllRepos();
         if (!response) return null;
 
+        console.log("response", response)
+
         sessionStorage.setItem(`${this.username}_repos`, JSON.stringify(response));
         return response.slice(offset, offset + limit);
     }

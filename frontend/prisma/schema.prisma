@@ -22,14 +22,17 @@ model User {
 model Post {
   id String @id @default(cuid())
 
-  projectName      String
-  projectUrl       String @unique
+  projectName      String  @unique
+  projectUrl       String?
   githubUserName   String
   githubRepoName   String
-  latestCommit     String
-  latestCommitTime String
-  githubBranch     String @default("main")
+  latestCommit     String?
+  latestCommitTime String?
+  githubBranch     String  @default("main")
+  status           String  @default("queued")
+  domainId         String
+  userId           String
+  user             User    @relation(fields: [userId], references: [id])
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  @@unique([projectName, projectUrl, userId])
 }

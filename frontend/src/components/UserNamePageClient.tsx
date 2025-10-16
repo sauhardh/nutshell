@@ -22,23 +22,26 @@ export default function UserNamePageClient({ projects, username }: { projects: P
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 space-y-5'>
                 {
                     filteredProjects.map(({
+                        id,
                         projectName,
                         projectUrl,
                         githubUserName,
                         githubRepoName,
                         latestCommit,
                         latestCommitTime,
-                        githubBranch
-                    }, _i) => (
+                        githubBranch,
+                        domainId,
+                        status
+                    }) => (
                         <ProjectCard
-                            key={_i}
+                            key={id}
                             projectName={projectName}
-                            projectUrl={projectUrl}
                             githubUserName={githubUserName}
                             githubRepoName={githubRepoName}
                             latestCommit={latestCommit}
                             latestCommitTime={latestCommitTime}
                             githubBranch={githubBranch}
+                            domainId={domainId}
                         />
                     ))
                 }

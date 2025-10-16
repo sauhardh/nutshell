@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '../../ui/button'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { GithubLogo } from '../logos'
@@ -10,14 +10,17 @@ import { parseUsername } from '@/lib/parseUsername';
 export default function LoginButton({ provider, text, iconClassName }: { provider: string, text: string, iconClassName?: string }) {
     const router = useRouter();
     const { data: session } = useSession();
-    if (session) {
-        if (session.user?.name) {
-            let _name = parseUsername(session.user.name)
-            router.replace(`/${_name}`);
-        } else {
-            router.push("/")
-        };
-    }
+
+    useEffect(() => {
+        if (session) {
+            if (session.user?.name) {
+                let _name = parseUsername(session.user.name)
+                router.replace(`/${_name}`);
+            } else {
+                router.push("/")
+            };
+        }
+    }, [session, router])
 
     const Icon = provider == "github" ? GithubLogo : BadgeCheck;
 

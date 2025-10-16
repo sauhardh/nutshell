@@ -14,3 +14,6 @@
 
 *to facilitate projects storage*
 - DATABASE_URL= <postgresql://postgres...>
+
+*TO CALL AN SERVER API.*
+* UPLOAD_SERVER_API="http://localhost:3000/api/v1/deploy"

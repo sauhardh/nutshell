@@ -16,14 +16,22 @@ import { redisClient } from "../redis";
 export async function downloadAndUploadRepo(req: Request, res: Response): Promise<void> {
     const _id: string = generateRandom();
     const localRepoPath: string = path.join(__dirname, `repos/${_id}`);
+    const { repoUrl, bucketName, postId, userId } = await req.body;
+
+    if (!repoUrl || !postId || !userId) {
+        res.status(400).json({ type: "failed", message: "arguments missing" })
+    }
 
     try {
-        const repoUrl: string = req.body?.repoUrl;
-        const bucketName: string = req.body?.bucketName;
-
         /// UPDATE LOGGING
-        await redisClient.lPush("jobQueue", _id);
-        await redisClient.hSet("status", _id, "uploading");
+        const jobData = {
+            userId,
+            postId,
+            domainId: _id
+        }
+
+        await redisClient.lPush("jobQueue", JSON.stringify(jobData));
+        await redisClient.hSet("status", userId, "uploading");
 
         await simpleGit().clone(repoUrl, localRepoPath);
         let allFiles: string[] = listAllFilesFromPath(localRepoPath);
@@ -35,12 +43,12 @@ export async function downloadAndUploadRepo(req: Request, res: Response): Promis
             await _uploadObject(file);
         }
         /// UPDATE LOGGING
-        await redisClient.hSet("status", _id, "download completed");
+        await redisClient.hSet("status", userId, "download completed");
         res.status(200).json({ type: "success", message: _id });
     } catch (error) {
         console.warn("Failed while downloading repo -> finding local path to download repo -> uploading files to the s3 cloud\n\n", error);
         /// UPDATE LOGGING
-        await redisClient.hSet("status", _id, "Failed to download");
+        await redisClient.hSet("status", userId, "Failed to download");
         res.status(404).json({ type: "failed", message: "Failed to download and Upload Repo" });
     }
 }
@@ -119,8 +127,8 @@ export async function deleteObjects(req: Request, res: Response) {
  */
 export async function JobStatus(req: Request, res: Response) {
     try {
-        const _id = req.query._id;
-        const status = await redisClient.hGet("status", _id as string);
+        const userId = req.query.userId;
+        const status = await redisClient.hGet("status", userId as string);
 
         res.status(200).json({ type: "success", message: status });
     } catch (error) {

@@ -12,7 +12,7 @@ app.use(cors());
 
 app.use("/api/v1", router);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3005;
 const start = async () => {
     try {
         await redisClient.connect();

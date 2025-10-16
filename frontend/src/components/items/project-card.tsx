@@ -4,25 +4,30 @@ import { GithubLogo } from './logos'
 import { GitBranch, Ellipsis } from 'lucide-react'
 
 export type ProjectCardType = {
+    id?: string,
     projectName: string,
-    projectUrl: string,
+    projectUrl?: string | null,
     githubUserName: string,
     githubRepoName: string,
-    latestCommit: string,
-    latestCommitTime: string,
+    latestCommit?: string | null,
+    latestCommitTime?: string | null,
     githubBranch: string
+    domainId: string,
+    status?: string | null
 }
 
 export default function ProjectCard({
     projectName,
-    projectUrl,
     githubUserName,
     githubRepoName,
     latestCommit,
     latestCommitTime,
-    githubBranch
+    githubBranch,
+    domainId
 }: ProjectCardType) {
     const date = (new Date()).toLocaleDateString("en-US", { day: "numeric", month: "short" });
+    let projectUrl = `http://${domainId}.localhost:7878/`;
+
     return (
         <div className='flex flex-col p-4 px-6 gap-3 text-sm border-2 rounded-xl w-full max-w-sm hover:shadow-2xl hover:scale-101'>
             <div className='flex items-center justify-between'>

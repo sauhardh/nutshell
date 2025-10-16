@@ -1,3 +1,4 @@
+import DeployButton from '@/components/items/buttons/deploy-btn';
 import { GithubLogo } from '@/components/items/logos';
 import { Button } from '@/components/ui/button';
 import { GitBranch } from 'lucide-react';
@@ -5,7 +6,7 @@ import React from 'react'
 
 export interface ImportPageProps {
     searchParams: Promise<{
-        ["project-name"]?: string,
+        ["project-name"]: string,
         link?: string,
         teamSlug?: string,
         branch: string
@@ -48,16 +49,7 @@ export default async function Page({ searchParams }: ImportPageProps) {
                     </div>
                 </div>
 
-                <Button className='w-full py-2'>
-                    Deploy
-                </Button>
-
-                <div className='w-full'>
-                    <p className='text-sm text-muted-foreground'>Progress</p>
-                    <div className='flex items-center px-5 italic w-full p-3 border h-20 bg-background rounded-sm'>
-                        <p>deploying...</p>
-                    </div>
-                </div>
+                <DeployButton url={repoUrl} projectName={projectName} branch={branch} />
             </div>
         </div>
     )

@@ -16,6 +16,8 @@ const data: Prisma.UserCreateInput[] = [
                     latestCommit: "commit",
                     latestCommitTime: "9:37 PM",
                     githubBranch: "main",
+                    status: "queued",
+                    domainId: "jaqly"
                 }
             ]
         }
