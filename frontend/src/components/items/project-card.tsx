@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import { GithubLogo } from './logos'
 import { GitBranch, Ellipsis } from 'lucide-react'
+import Link from 'next/link'
 
 export type ProjectCardType = {
     id?: string,
@@ -37,7 +38,9 @@ export default function ProjectCard({
                     </div>
                     <div>
                         <p className='font-medium'>{projectName || "project-name"}</p>
-                        <p className='text-muted-foreground'>{projectUrl || "***.nutshell.com"}</p>
+                        <Link href={projectUrl} target='_blank'>
+                            <p className='text-muted-foreground text-shadow-2xs text-shadow-blue-900 text-xs cursor-pointer hover:text-blue-300'>{projectUrl || "***.nutshell.com"}</p>
+                        </Link>
                     </div>
                 </div>
                 <Ellipsis className='self-start text-muted-foreground' />

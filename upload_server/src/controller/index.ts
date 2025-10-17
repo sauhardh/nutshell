@@ -31,10 +31,12 @@ export async function downloadAndUploadRepo(req: Request, res: Response): Promis
         }
 
         await redisClient.lPush("jobQueue", JSON.stringify(jobData));
-        await redisClient.hSet("status", userId, "uploading");
+        await redisClient.publish(userId, "downloading from github")
 
         await simpleGit().clone(repoUrl, localRepoPath);
         let allFiles: string[] = listAllFilesFromPath(localRepoPath);
+        await redisClient.publish(userId, "Repo downloaded")
+        await redisClient.publish(userId, "Uploading")
 
         /// IF BUCKET DOES NOT EXIST, IT CREATES A NEW ONE. BUCKET NAME IS DEFAULT HERE i.e. nutshell
         if (!await _bucketExists(bucketName)) await _createBucket(bucketName);
@@ -43,12 +45,14 @@ export async function downloadAndUploadRepo(req: Request, res: Response): Promis
             await _uploadObject(file);
         }
         /// UPDATE LOGGING
-        await redisClient.hSet("status", userId, "download completed");
+        await redisClient.publish(userId, "upload completed")
+
         res.status(200).json({ type: "success", message: _id });
     } catch (error) {
         console.warn("Failed while downloading repo -> finding local path to download repo -> uploading files to the s3 cloud\n\n", error);
         /// UPDATE LOGGING
         await redisClient.hSet("status", userId, "Failed to download");
+        await redisClient.publish(userId, "failed to upload")
         res.status(404).json({ type: "failed", message: "Failed to download and Upload Repo" });
     }
 }
@@ -115,24 +119,5 @@ export async function deleteObjects(req: Request, res: Response) {
     } catch (error) {
         console.warn("Error on performing action on deleteBucket", error);
         res.status(500).json({ type: "failed", message: `Error occured on trying to delete Objects from bucket of your request. Error: ${error}` });
-    }
-}
-
-/** 
- * **`GET /status/:_id`**
- * 
- * To get status about the job/process that is happening
- * 
- * id of job must be passed as *query* `_id` 
- */
-export async function JobStatus(req: Request, res: Response) {
-    try {
-        const userId = req.query.userId;
-        const status = await redisClient.hGet("status", userId as string);
-
-        res.status(200).json({ type: "success", message: status });
-    } catch (error) {
-        console.warn("Could not get status info from redis", error);
-        res.status(400).json({ type: "failed", message: "Could not get status info from redis" });
     }
 }

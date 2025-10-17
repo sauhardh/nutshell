@@ -1,7 +1,9 @@
 import DeployButton from '@/components/items/buttons/deploy-btn';
 import { GithubLogo } from '@/components/items/logos';
 import { Button } from '@/components/ui/button';
+import { authOptions } from '@/lib/authOptions';
 import { GitBranch } from 'lucide-react';
+import { getServerSession } from 'next-auth';
 import React from 'react'
 
 export interface ImportPageProps {
@@ -15,6 +17,11 @@ export interface ImportPageProps {
 export default async function Page({ searchParams }: ImportPageProps) {
     const { ["project-name"]: projectName, link, teamSlug, branch } = await searchParams;
     const repoUrl: string = decodeURIComponent(link || "");
+
+    const userId = (await getServerSession(authOptions))?.user.id;
+    if (!userId) {
+        return <div className='text-muted-foreground animate-pulse m-5 text-sm italic flex items-center justify-center'>Unauthorized access</div>
+    }
 
     return (
         <div className='flex flex-col items-center'>
@@ -49,7 +56,7 @@ export default async function Page({ searchParams }: ImportPageProps) {
                     </div>
                 </div>
 
-                <DeployButton url={repoUrl} projectName={projectName} branch={branch} />
+                <DeployButton url={repoUrl} projectName={projectName} branch={branch} userId={userId} teamSlug={teamSlug} />
             </div>
         </div>
     )

@@ -40,6 +40,7 @@ class CloudStorage:
             raise
 
         self._working_dir = local_path / prefix
+        logger.info(f"working dir {self._working_dir}")
 
         try:
             paginator = self.s3.get_paginator("list_objects_v2").paginate(

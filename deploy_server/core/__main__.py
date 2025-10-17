@@ -37,7 +37,7 @@ def main(
         logger.warning(f"Failed to decode data in json format {e}")
         return False
 
-    redis_client.put_status("status", key=userId, value="downloading...")
+    redis_client.publish(userId, "downloading code")
 
     logger.info("next_repo %s", domainId)
     if not domainId:
@@ -62,21 +62,41 @@ def main(
                 ),
             )
         return False
+    redis_client.publish(userId, "download completed")
 
     working_dir = cloud.get_working_dir()  # local path to a dir
     if not working_dir or not any(Path(working_dir).iterdir()):
         logger.error(f"No files found in {working_dir}, cannot build")
         return False
-
-    redis_client.put_status("status", key=userId, value="download completed")
+    redis_client.publish(userId, "building...")
 
     # to compile those downloaded objects(code) inside Docker container.
-    builder = Build().build(app_path=working_dir)
+    try:
+        builder = Build().build(app_path=working_dir)
+    except RuntimeError as e:
+        logger.warning(f"Error occured while building objects {e}")
+        if retries < 1:
+            redis_client.put_new_job(
+                "jobQueue",
+                values=json.dumps(
+                    {
+                        "userId": userId,
+                        "postId": postId,
+                        "domainId": domainId,
+                        "retries": retries + 1,
+                    }
+                ),
+            )
+        return False
+    redis_client.publish(userId, "build completed")
+    redis_client.publish(userId, "uploading...")
+
     # local path to a compiled code, inside downloaded code.
     build_path = builder.get_build_path()
     base_dir = Path(build_path).parent.parent
 
     upload_to_bucket("nutshell-build", build_path, cloud, base_dir)
+    redis_client.publish(userId, "upload completed")
 
     try:
         r = requests.post(
@@ -90,7 +110,7 @@ def main(
         logger.warning(
             f"Error occured while sending completed. {e}",
         )
-    redis_client.put_status("status", key=userId, value="Build completed")
+    redis_client.publish(userId, "success")
 
 
 load_dotenv(dotenv_path="../.env")

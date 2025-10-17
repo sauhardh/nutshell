@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-async function dbPostUpload(projectName: string, username: string, branch: string, userId: any): Promise<string> {
+async function dbPostUpload(projectName: string, username: string, branch: string, userId: any) {
     let _postData: any = {
         projectName,
         projectUrl: "",
@@ -16,23 +16,28 @@ async function dbPostUpload(projectName: string, username: string, branch: strin
         domainId: "",
     };
 
-    const post = await prisma.user.upsert({
-        where: { id: userId },
-        update: {
-            posts: {
-                create: [_postData]
-            }
-        },
-        create: {
-            id: userId,
-            posts: {
-                create: [_postData]
-            }
-        },
-        include: { posts: true }
-    });
-
-    return post.posts[0].id
+    try {
+        const post = await prisma.user.upsert({
+            where: { id: userId },
+            update: {
+                posts: {
+                    create: [_postData]
+                }
+            },
+            create: {
+                id: userId,
+                posts: {
+                    create: [_postData]
+                }
+            },
+            include: { posts: true }
+        });
+        return post.posts[0].id
+    }
+    catch (error: any) {
+        console.error("Error occurred in dbPostUpload:", error);
+        throw new Error(`Database request error: ${error.message}`);
+    }
 }
 
 export async function POST(req: NextRequest) {
@@ -44,7 +49,7 @@ export async function POST(req: NextRequest) {
         const { username, id: userId } = session.user;
         const { repoUrl, bucketName, projectName, branch } = await req.json();
 
-        const postId: string = await dbPostUpload(projectName, username, branch, userId);
+        const postId = await dbPostUpload(projectName, username, branch, userId);
 
         const response = await fetch(`${process.env.UPLOAD_SERVER_API}`, {
             method: "POST",
@@ -60,12 +65,13 @@ export async function POST(req: NextRequest) {
         });
 
         if (!response.ok) {
+            console.log("response", response);
             return NextResponse.json(response, { status: response.status });
         }
         const res = await response.json();
         return NextResponse.json(res);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error ocurred on server upload api", error);
-        return NextResponse.json({ type: "failed", message: (error as Error).message }, { status: 500 })
+        return NextResponse.json({ type: "failed", message: error.message }, { status: 500 })
     }
 }

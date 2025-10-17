@@ -19,3 +19,6 @@ class NutshellRedis:
         if not key:
             key = "status"
         return self.r.hset(name, key, value)
+
+    def publish(self, channel: str, message: str):
+        self.r.publish(channel=channel, message=message)

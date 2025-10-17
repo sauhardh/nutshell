@@ -22,8 +22,8 @@ class Build:
             raise FileNotFoundError(f"{app_path} does not exist")
 
         container = self.client.containers.run(
-            image="node:20",
-            command="bash -c 'npm install && npm run build'",
+            image="node:latest",
+            command="bash -c 'chmod -R 777 /app && npm install && npm run build'",
             volumes={str(app_path): {"bind": "/app", "mode": "rw"}},
             working_dir="/app",
             detach=True,
