@@ -6,11 +6,11 @@ export async function POST(req: NextRequest) {
         const { userId, postId, domainId } = await req.json();
 
         if (!userId || !postId || !domainId) {
-            NextResponse.json({ type: "failed", message: "Missing fields" }, { status: 400 })
+            return NextResponse.json({ type: "failed", message: "Missing fields" }, { status: 400 })
         }
 
-        await prisma.post.update({
-            where: { id: postId },
+        await prisma.post.updateMany({
+            where: { id: postId, userId: userId },
             data: {
                 status: "deployed",
                 domainId,
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     } catch (error) {
         console.error("Error ocurred on receiving deploy completed info from server");
-        NextResponse.json({ type: "failed", message: (error as Error).message }, { status: 500 });
+        return NextResponse.json({ type: "failed", message: (error as Error).message }, { status: 500 });
     }
 
 }

@@ -47,6 +47,7 @@ export async function downloadAndUploadRepo(req: Request, res: Response): Promis
         /// UPDATE LOGGING
         await redisClient.publish(userId, "upload completed")
 
+        console.log("Success", _id);
         res.status(200).json({ type: "success", message: _id });
     } catch (error) {
         console.warn("Failed while downloading repo -> finding local path to download repo -> uploading files to the s3 cloud\n\n", error);

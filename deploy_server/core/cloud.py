@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class CloudStorage:
-    _max_workers = 5
+    _max_workers = 1
     _working_dir: str | None = None
 
     def __init__(self) -> None:
@@ -35,12 +35,14 @@ class CloudStorage:
         try:
             local_path: Path = Path(local_path)
             local_path.mkdir(parents=True, exist_ok=True)
+
+            logger.info(f"cloud download objects, local_path {local_path}")
         except OSError as e:
             logger.error(f"Path creation failed on download_objects: {e}")
             raise
 
         self._working_dir = local_path / prefix
-        logger.info(f"working dir {self._working_dir}")
+        logger.info(f"cloud working dir {self._working_dir}")
 
         try:
             paginator = self.s3.get_paginator("list_objects_v2").paginate(
@@ -55,8 +57,13 @@ class CloudStorage:
                     target.parent.mkdir(parents=True, exist_ok=True)
                     download_jobs.append((key, target))
 
+            logger.info(f"cloud download jobs, local_path {download_jobs}")
+
             def _download_task(key_target: tuple) -> str:
                 key, target = key_target
+                if target.exists():
+                    logger.info(f"{target} already exist. Skipping")
+                    return key
                 self.s3.download_file(bucket_name, key, str(target))
                 return key
 

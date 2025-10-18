@@ -39,6 +39,7 @@ def main(
 
     redis_client.publish(userId, "downloading code")
 
+    logger.info(f"got from redis {userId}, {postId}, {retries}")
     logger.info("next_repo %s", domainId)
     if not domainId:
         logger.info("No new jobs. Did not get any another job to continue.")
@@ -65,6 +66,7 @@ def main(
     redis_client.publish(userId, "download completed")
 
     working_dir = cloud.get_working_dir()  # local path to a dir
+    logger.info(f"workingdir in main {working_dir}")
     if not working_dir or not any(Path(working_dir).iterdir()):
         logger.error(f"No files found in {working_dir}, cannot build")
         return False

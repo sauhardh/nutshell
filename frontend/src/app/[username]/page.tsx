@@ -1,7 +1,4 @@
-import AddNewBtn from '@/components/items/buttons/addnew-btn';
-import ProjectCard, { ProjectCardType } from '@/components/items/project-card';
-import SearchBar from '@/components/items/search-bar';
-import NewRepoCardClient from '@/components/NewRepoCardClient';
+import { ProjectCardType } from '@/components/items/project-card';
 import UserNamePageClient from '@/components/UserNamePageClient';
 import { authOptions } from '@/lib/authOptions';
 import { parseUsername } from '@/lib/parseUsername';
@@ -28,10 +25,7 @@ export default async function Page(props: pageProps) {
         where: { id: session.user.id },
         include: { posts: true }
     });
-    if (!dbUser) return redirect("/login");
     const projects: ProjectCardType[] = dbUser?.posts ?? [];
-
-    if (!projects) return <div className='text-muted-foreground animate-pulse m-5 text-sm italic flex items-center justify-center'>Looks like you have no projects yet!</div>
     return (
         <div className='p-10'>
             < UserNamePageClient projects={projects} username={username} />
