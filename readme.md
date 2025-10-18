@@ -2,7 +2,7 @@
 
 A developer cloud to build and deploy web application.
 This is a clone app of `vercel`
-
+**Demo: [Link](https://youtu.be/K3n0yvHbiIw?si=Ksaxw8vL4odgUn9i)**
 
 ![nutshell](git-images/nutshell.png)
 
@@ -10,7 +10,6 @@ This is a clone app of `vercel`
 ## How it works--_in a nutshell_.
 
 ![Server-Design](git-images/nutshell-design.svg)
-Demo: [Link](https://youtu.be/K3n0yvHbiIw?si=Ksaxw8vL4odgUn9i)
 
 **Upload server**
 - Downloads the repository from `github`
@@ -126,8 +125,8 @@ cargo run
 ```
 
 ### todo
-[ ] make a common env file
+- [ ] make a common env file
 
-[ ] fix bugs and nit
+- [ ] fix bugs and nit
 
-[ ] place redis uri in .env
+- [ ] place redis uri in .env
