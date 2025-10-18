@@ -43,12 +43,12 @@ class Build:
             buffer = ""
 
         exit_code = container.wait()["StatusCode"]
-        container.remove()
+        container.remove(force=True)
 
         if exit_code != 0:
             raise RuntimeError(
-                f"React build faile inside container. Exit code: {exit_code}"
-            )
+                f"React build failed inside container. Exit code: {exit_code}"
+            )   
         return self
 
     def get_build_path(self) -> Path | None:

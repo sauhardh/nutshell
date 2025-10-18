@@ -36,13 +36,11 @@ class CloudStorage:
             local_path: Path = Path(local_path)
             local_path.mkdir(parents=True, exist_ok=True)
 
-            logger.info(f"cloud download objects, local_path {local_path}")
         except OSError as e:
             logger.error(f"Path creation failed on download_objects: {e}")
             raise
 
         self._working_dir = local_path / prefix
-        logger.info(f"cloud working dir {self._working_dir}")
 
         try:
             paginator = self.s3.get_paginator("list_objects_v2").paginate(
@@ -56,8 +54,6 @@ class CloudStorage:
                     target: Path = local_path / key
                     target.parent.mkdir(parents=True, exist_ok=True)
                     download_jobs.append((key, target))
-
-            logger.info(f"cloud download jobs, local_path {download_jobs}")
 
             def _download_task(key_target: tuple) -> str:
                 key, target = key_target
