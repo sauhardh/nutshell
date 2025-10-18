@@ -3,11 +3,14 @@
 A developer cloud to build and deploy web application.
 This is a clone app of `vercel`
 
-![nutshell](git-images/nutshell)
+
+![nutshell](git-images/nutshell.png)
+
 
 ## How it works--_in a nutshell_.
 
 ![Server-Design](git-images/nutshell-design.svg)
+Demo: [Link](https://youtu.be/K3n0yvHbiIw?si=Ksaxw8vL4odgUn9i)
 
 **Upload server**
 - Downloads the repository from `github`
